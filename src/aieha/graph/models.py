@@ -24,11 +24,33 @@ class NodeType(StrEnum):
 
 
 
+class EdgeType(StrEnum):
+    """Controlled relationship types in the AIEHA economic graph."""
+
+    USES = "uses"
+    CONSUMES = "consumes"
+    RUNS_ON = "runs_on"
+    PRODUCES = "produces"
+    RESULTS_IN = "results_in"
+    CREATES = "creates"
+
+
+class Edge(BaseModel):
+    """Cononical directed edge in the AIEH economic graph"""
+    source: UUID
+    target: UUID
+    type: EdgeType
+    attributes: dict[str, Any] = Field(default_factory=dict)
+    created_at: datetime = Field(
+        default_factory=lambda: datetime.now(UTC)
+    )
+
+
 class Node(BaseModel):
     """Canonical node in the AIEHA economic graph."""
 
     id: UUID = Field(default_factory=uuid4)
-    type: str
+    type: NodeType
     attributes: dict[str, Any] = Field(default_factory=dict)
     created_at: datetime = Field(
         default_factory=lambda: datetime.now(UTC)
